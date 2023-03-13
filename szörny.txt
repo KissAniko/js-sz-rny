@@ -1,0 +1,223 @@
+<html>
+<head>
+<style>
+header{
+height:15%;
+text-align:center;
+}
+nav{
+width: 20%;
+float: left;
+}
+</style>
+<script>
+const monster_array=[];
+
+
+function init(){
+fetch('https://www.dnd5eapi.co/api/monsters')
+	.then(res => res.json())
+	//.then(data => console.log(data))
+	.then(elemek => {
+	for (j=0;j<elemek.count;j++)	monster_array.push(elemek.results[j])
+	
+	
+	})
+	//.then(()=> console.log(monster_array))
+	.then(()=> kiire());
+}
+
+function kiire() {
+
+for (let i=0; i<monster_array.length; i++)
+{
+ fetch('https://www.dnd5eapi.co'+monster_array[i].url)
+	.then(res => res.json())
+	.then(elemek => {
+	
+	try {
+	
+	if (elemek.image!=undefined) {
+	
+	document.getElementById("monsters").innerHTML+="<li onclick=szornyleker('"+monster_array[i].index+"')>"+monster_array[i].name+"</li>";
+	}
+	}
+	catch{
+	
+	}
+	}
+	);
+	
+
+}
+
+}
+
+
+
+
+
+
+function szornyleker(para_url){
+let temp=[];
+fetch('https://www.dnd5eapi.co/api/monsters/'+para_url)
+	.then(res => res.json())
+	.then(data => {
+	console.log(data)
+	document.getElementById("cimsor").innerHTML=data.name;
+	document.getElementById("kepecske").src="http://www.dnd5eapi.co"+data.image;
+	
+	})
+}
+
+
+
+function kiir()
+{
+
+for (i=0; i<monster_array.length; i++)
+{
+
+	document.getElementById("monsters").innerHTML+="<li onclick=szornyleker('"+monster_array[i].index+"')>"+monster_array[i].name+"</li>";
+
+//"<li>"+monster_array[i].name+"</li>"
+
+}
+}
+
+
+</script>
+</head>
+<body onload="init()">
+<header><h1>Dungeons and Dragons izé</h1></header>
+<nav>
+<ul id="monsters">
+</ul>
+</nav>
+<main>
+<h2 id="cimsor"></h2>
+<img id="kepecske">
+</main>
+
+
+
+</body>
+</html>
+
+
+--------------------------------------------------------------------------------
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="szorny.css">
+    <title>Document</title>
+
+</head>
+
+ <body >
+
+  
+    <ul id="monsters"></ul>
+    <script>
+const monster_array=[];
+
+//function init(){}    ---> body tegbe beírni <body onload="init()">
+fetch ('http://www.dnd5eapi.co/api/monsters')
+    .then(res=> res.json())  //  --> ez a sor azért kell, h f12-vel le tudjuk ellenőrízni az adatokat
+   // .then (data => console.log(data))
+    .then(elemek =>{
+        for (j=0; j<elemek.count; j++) monster_array.push(elemek.results[j])
+    
+    })
+    // push = hozzáad 1-1 elemet
+    // j= a resultsban lévő index,  ezeket fogjuk beletenni a tömbbe
+    //-------------------------------------------------------------------------
+     //.then(() => console.log(monster_array))
+
+     .then(() => kiír());
+
+
+
+
+
+     function szornyleker(para_url){
+        let temp=[];
+
+        const elemneve=document.getElementById("cimsor");
+        elemneve.innerHTML="";
+        fetch('http://www.dnd5eapi.co/api/monsters/'+para_url)
+        .then(res => res.json())    
+        .then(data => {
+            console.log(data);
+            elemneve.innerHTML+=data.name;
+            document.getElementById("kepecske").src="http://www.dnd5eapi.co"+data.image;
+            elemneve.innerHTML+="<table>";
+
+           elemneve.innerHTML+="<tr><td>Ügyesség:</td><td>"+data.dexterity+"</td></tr>";     
+                                       
+        })
+     }
+
+
+
+function kiír()
+{
+for(i=0; i<monster_array.length; i++)
+{
+    document.getElementById("monsters").innerHTML +="<li onclick=szornyleker('"+monster_array[i].index+"')>"+monster_array[i].name+"</li";
+     // "<li>"+monster_array[i].name+"</li>"   
+}
+
+}
+function szornyleker(para_url)       // para_url=index
+{     
+    let temp =[];
+    fetch ('http://www.dnd5eapi.co/api/monsters/'+ para_url)
+    .then(res=> res.json())  //  --> ez a sor azért kell, h f12-vel le tudjuk ellenőrízni az adatokat
+     .then(data=> {
+    //console.log(data)                                            //.then (data => console.log(data))
+    document.getElementById("címsor").innerHTML=data.name;
+    document.getElementById("kepecske").src="http://www.dnd5eapi.co"+data.image;
+
+    })
+    
+}
+
+
+
+    </script>
+    <mein>
+<h2 id="címsor"></h2>
+<img src="" id="kepecske" alt="">
+<table >
+    <tr>
+        <th>strength</th>
+        <th>dexterity</th>
+        <th>constitution</th>
+        <th>intelligence</th>
+        <th>wisdom</th>
+        <th>charisma</th>
+        <th>proficiencies</th>
+    </tr>
+    <tr>
+        <td id="strength"></td>
+        <tdi id="dexterity"></td>
+        <td id="constitution"></td>
+        <td id="intelligence"></td>
+        <td id="wisdom"></td>
+        <td id="charisma"></td>
+        <td id="proficiencies"></td>
+    </tr>
+</table>
+</mein>
+</body>
+</html>
+
+
+
